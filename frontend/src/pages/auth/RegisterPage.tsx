@@ -1,26 +1,19 @@
-import styled from "styled-components"
 import RegisterForm from "../../components/auth/RegisterForm"
 import { AxiosError } from "axios"
+import { BaseContainer } from "../../components/styled/Container"
+import { BaseResponse } from "../../api/schemas/response"
 
 
 interface ComponentProps {
-    handleError: (error: AxiosError) => void
+    handleError: (error: AxiosError<BaseResponse>) => void
 }
 
 
 export default function RegisterPage({ handleError }: ComponentProps) {
     return (
-        <Container>
+        <BaseContainer>
             <RegisterForm handleError={handleError}/>
-        </Container>
+        </BaseContainer>
     )
 }
     
-
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-`

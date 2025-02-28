@@ -1,7 +1,7 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import AuthService from "../../api/services/authService";
 import { Typography } from "antd";
-import { BaseUserInterface } from "../../schemas/user";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { BaseUserInterface } from "../../api/schemas/user";
+import AuthService from "../../api/services/authService";
 import useUserAuthCallback from "../../hooks/useAuthCalback";
 
 interface ComponentProps {
@@ -10,7 +10,7 @@ interface ComponentProps {
 
 export default function AuthCallbackPage({ setUser }: ComponentProps): JSX.Element {
     const navigate = useNavigate();
-    const [searchParam, ] = useSearchParams()
+    const [searchParam,] = useSearchParams()
     const authService = new AuthService();
 
     useUserAuthCallback(searchParam, navigate, authService, setUser);

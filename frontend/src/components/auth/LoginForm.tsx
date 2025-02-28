@@ -1,16 +1,18 @@
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Form, Input, Typography } from "antd";
 import { useForm } from "antd/es/form/Form";
-import styled from "styled-components";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import OauthServicesGroup from "./OauthServicesGroup";
-import { useNavigate } from "react-router-dom";
-import { LoginUserInterface } from "../../schemas/auth";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { LoginUserInterface } from "../../api/schemas/auth";
 import AuthService from "../../api/services/authService";
+import OauthServicesGroup from "./OauthServicesGroup";
+import { BaseContainer } from "../styled/Container";
+import { BaseResponse } from "../../api/schemas/response";
 
 
 interface ComponentProps {
-    handleError: (error: AxiosError) => void
+    handleError: (error: AxiosError<BaseResponse>) => void
 }
 
 
@@ -23,8 +25,8 @@ export default function LoginForm({ handleError }: ComponentProps) {
         const userForm = await form.validateFields();
         await authService.checkUserExist(userForm, false).then(() => {
             navigate(
-                "/verification", 
-                {state: {redirected: true, userForm: userForm}}
+                "/verification",
+                { state: { redirected: true, userForm: userForm } }
             )
         }).catch(
             (error) => handleError(error)
@@ -78,11 +80,9 @@ const StyledForm = styled(Form<LoginUserInterface>)`
 `;
 
 
-const FormContainer = styled.div`
-    display: flex;
+const FormContainer = styled(BaseContainer)`
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 400px;
+    max-width: 300px;
+    width: 100%;
 `;
 

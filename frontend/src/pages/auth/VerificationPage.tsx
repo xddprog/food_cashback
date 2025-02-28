@@ -1,15 +1,16 @@
-import styled from "styled-components";
-import VerificationCodeForm from "../../components/auth/VerificationCodeForm";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { BaseUserInterface } from "../../schemas/user";
-import { RegisterUserInterface } from "../../schemas/auth";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { RegisterUserInterface } from "../../api/schemas/auth";
+import { BaseUserInterface } from "../../api/schemas/user";
+import VerificationCodeForm from "../../components/auth/VerificationCodeForm";
+import { BaseContainer } from "../../components/styled/Container";
+import { BaseResponse } from "../../api/schemas/response";
 
 
 interface ComponentProps {
     setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>>,
-    handleError: (error: AxiosError) => void
+    handleError: (error: AxiosError<BaseResponse>) => void
 }
 
 export default function VerificationPage({ setUser, handleError }: ComponentProps) {
@@ -20,26 +21,17 @@ export default function VerificationPage({ setUser, handleError }: ComponentProp
         if (!location.state?.redirected) {
             navigate("/register")
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
     return (
-        <Container>
-            <VerificationCodeForm 
+        <BaseContainer>
+            <VerificationCodeForm
                 setUser={setUser}
                 userForm={location.state?.userForm as RegisterUserInterface}
                 handleError={handleError}
             />
-        </Container>
+        </BaseContainer>
     );
 }
-
-
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-`

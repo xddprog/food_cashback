@@ -1,16 +1,18 @@
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Form, Input, Typography } from "antd";
 import { useForm } from "antd/es/form/Form";
-import styled from "styled-components";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import OauthServicesGroup from "./OauthServicesGroup";
-import { RegisterUserInterface } from "../../schemas/auth";
-import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { RegisterUserInterface } from "../../api/schemas/auth";
 import AuthService from "../../api/services/authService";
+import OauthServicesGroup from "./OauthServicesGroup";
+import { BaseContainer } from "../styled/Container";
+import { BaseResponse } from "../../api/schemas/response";
 
 
 interface ComponentProps {
-    handleError: (error: AxiosError) => void
+    handleError: (error: AxiosError<BaseResponse>) => void
 }
 
 
@@ -23,8 +25,8 @@ export default function RegisterForm({ handleError }: ComponentProps) {
         const userForm = await form.validateFields();
         await authService.checkUserExist(userForm, true).then(() => {
             navigate(
-                "/verification", 
-                {state: {redirected: true, userForm: userForm}}
+                "/verification",
+                { state: { redirected: true, userForm: userForm } }
             )
         }).catch(
             (error) => handleError(error)
@@ -52,7 +54,7 @@ export default function RegisterForm({ handleError }: ComponentProps) {
                         },
                     ]}
                 >
-                    <Input prefix={<MailOutlined />} placeholder="Username"  size="large"/>
+                    <Input prefix={<MailOutlined />} placeholder="Username" size="large" />
                 </Form.Item>
                 <Form.Item
                     name="email"
@@ -65,7 +67,7 @@ export default function RegisterForm({ handleError }: ComponentProps) {
                         },
                     ]}
                 >
-                    <Input prefix={<MailOutlined />} type="email" placeholder="Почта" size="large"/>
+                    <Input prefix={<MailOutlined />} type="email" placeholder="Почта" size="large" />
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -79,7 +81,7 @@ export default function RegisterForm({ handleError }: ComponentProps) {
                 >
                     <Input prefix={<LockOutlined />} type="password" placeholder="Пароль" size="large" />
                 </Form.Item>
-                <OauthServicesGroup isRegisterForm={true}/>
+                <OauthServicesGroup isRegisterForm={true} />
             </StyledForm>
         </FormContainer>
     );
@@ -91,11 +93,9 @@ const StyledForm = styled(Form<RegisterUserInterface>)`
 `;
 
 
-const FormContainer = styled.div`
-    display: flex;
+const FormContainer = styled(BaseContainer)`
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 450px;
+    max-width: 300px;
+    width: 100%;
 `;
 

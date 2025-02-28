@@ -1,6 +1,8 @@
 import { Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import AuthService from '../../api/services/authService';
+import { OAuthServices } from '../../utils/enums';
 
 
 interface ComponentProps {
@@ -10,27 +12,16 @@ interface ComponentProps {
 
 export default function OauthServicesGroup ({isRegisterForm}: ComponentProps): JSX.Element {
     const navigate = useNavigate();
+    const authServices: { name: OAuthServices, icon: string}[] = [
+        { name: OAuthServices.YANDEX, icon: '/public/social/yandex.png', },
+        { name: OAuthServices.VK, icon: '/public/social/vk.png'},
+        { name: OAuthServices.GITHUB, icon: '/public/social/github.png'},
+        { name: OAuthServices.TELEGRAM, icon: '/public/social/telegram.png' },
+    ];
+    const authService = new AuthService();
 
-    function authWithGithub() {
-        window.location.assign(
-            `${import.meta.env.VITE_GITHUB_OAUTH_URL}/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`
-            + `&redirect_uri=${encodeURIComponent(import.meta.env.VITE_BASE_API_URL + '/auth/callback?service=github')}`
-        );
-    }
-    
-    function authWithVk() {
-        window.location.assign(
-            `${import.meta.env.VITE_VK_API_URL}?client_id=${import.meta.env.VITE_VK_APP_ID}`
-            + `&display=popup`
-            + `&redirect_uri=${encodeURIComponent(import.meta.env.VITE_REDIRECT_URI + '/auth/callback')}`
-            + `&response_type=code`
-            + `&v=5.131`
-        );
-    }
-
-    function authWithYandex() {
-        window.location.assign(
-            `${import.meta.env.VITE_YANDEX_API_URL}/authorize?response_type=token&client_id=${import.meta.env.VITE_YANDEX_CLIENT_ID}`);
+    function authWithOAuth(service: OAuthServices) {
+        authService.authWithOAuth(service)
     }
 
     return (
@@ -38,23 +29,13 @@ export default function OauthServicesGroup ({isRegisterForm}: ComponentProps): J
             <StyledButton type="primary" htmlType="submit">
                 {!isRegisterForm ? "Войти": "Зарегистрироваться"}
             </StyledButton>
+            
             <ButtonsGrid>
-                <StyledButton onClick={authWithYandex}>
-                    <StyledLinkButtonImage src="/public/social/yandex.png" />
-                    {!isRegisterForm ? "Войти": "Регистрация"} c Yandex 
+            {authServices.map((service) => (
+                <StyledButton key={service.name} onClick={() => authWithOAuth(service.name)}>
+                    <StyledLinkButtonImage src={service.icon} />
                 </StyledButton>
-                <StyledButton onClick={authWithVk}>
-                    <StyledLinkButtonImage src="/public/social/vk.png" />
-                    {!isRegisterForm ? "Войти": "Регистрация"} c VK 
-                </StyledButton>
-                <StyledButton onClick={authWithGithub}>
-                    <StyledLinkButtonImage src="/public/social/github.png" />
-                    {!isRegisterForm ? "Войти": "Регистрация"} c Github 
-                </StyledButton>
-                <StyledButton>
-                    <StyledLinkButtonImage src="/public/social/telegram.png" />
-                    {!isRegisterForm ? "Войти": "Регистрация"} c Telegram 
-                </StyledButton>
+            ))}
             </ButtonsGrid>
             <LinksContainer>
                 <LinksContinerItem>
@@ -62,7 +43,9 @@ export default function OauthServicesGroup ({isRegisterForm}: ComponentProps): J
                     {isRegisterForm ? <a>Восстановить</a>: null}
                 </LinksContinerItem>
                 <LinksContinerItem>
-                    <Typography.Paragraph>{!isRegisterForm ? "Нет аккаунта?": "Есть аккаунт?"}</Typography.Paragraph>
+                    <Typography.Paragraph>
+                        {!isRegisterForm ? "Нет аккаунта?": "Есть аккаунт?"}
+                        </Typography.Paragraph>
                     <a onClick={() => navigate(isRegisterForm ? "/login": "/register")}>
                         {isRegisterForm ? "Войти": "Зарегистрироваться"}
                     </a>

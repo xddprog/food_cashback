@@ -1,20 +1,21 @@
 import { Button, Form, Input, Typography } from "antd";
-import styled from "styled-components";
-import { BaseUserInterface } from "../../schemas/user";
-import AuthService from "../../api/services/authService";
-import { LoginUserInterface, RegisterUserInterface } from '../../schemas/auth';
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { LoginUserInterface, RegisterUserInterface } from '../../api/schemas/auth';
+import { BaseUserInterface } from "../../api/schemas/user";
+import AuthService from "../../api/services/authService";
+import { BaseContainer } from "../styled/Container";
 
 
 interface ComponentProps {
     setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>>,
-    userForm: RegisterUserInterface| LoginUserInterface,
+    userForm: RegisterUserInterface | LoginUserInterface,
     handleError: (error: AxiosError) => void
 }
 
 
-export default function VerificationCodeForm({setUser, userForm, handleError }: ComponentProps) {
+export default function VerificationCodeForm({ setUser, userForm, handleError }: ComponentProps) {
     const [form] = Form.useForm();
     const authService = new AuthService();
     const navigate = useNavigate()
@@ -47,27 +48,27 @@ export default function VerificationCodeForm({setUser, userForm, handleError }: 
     return (
         <Container>
             <TextsContainer>
-                <Typography.Title style={{margin: 0}}>Верификация</Typography.Title>
+                <Typography.Title style={{ margin: 0 }}>Верификация</Typography.Title>
                 <Typography.Paragraph>Пожалуйста, проверьте вашу почту</Typography.Paragraph>
             </TextsContainer>
             <StyledForm form={form}>
                 <StyledFormItem name="first">
-                    <StyledInput maxLength={1}/>
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
                 <StyledFormItem name="second">
-                    <StyledInput maxLength={1}/> 
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
                 <StyledFormItem name="third">
-                    <StyledInput maxLength={1}/> 
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
                 <StyledFormItem name="fourth">
-                    <StyledInput maxLength={1}/> 
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
                 <StyledFormItem name="fifth">
-                    <StyledInput maxLength={1}/> 
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
                 <StyledFormItem name="sixth">
-                    <StyledInput maxLength={1}/> 
+                    <StyledInput maxLength={1} />
                 </StyledFormItem>
             </StyledForm>
             <StyledButton type="primary" onClick={verifyUser}>Подтвердить</StyledButton>
@@ -85,17 +86,11 @@ const StyledInput = styled(Input)`
     color: #8762bf;
 `;
 
-
 const StyledFormItem = styled(Form.Item)`
     margin: 0;
 `;
 
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+const Container = styled(BaseContainer)`
     width: 300px;
     background: #171818;
     border-radius: 10px;
